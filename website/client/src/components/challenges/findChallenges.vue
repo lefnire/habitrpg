@@ -171,7 +171,7 @@ export default {
   computed: {
     ...mapState({ user: 'user.data' }),
     filteredChallenges () {
-      return this.challenges;
+      return this.challenges.filter(this.userCanViewFlagged);
     },
   },
   mounted () {
@@ -243,6 +243,11 @@ export default {
       this.page += 1;
       this.loadChallenges();
     }, 1000),
+    userCanViewFlagged (challenge) {
+      return challenge.flagCount < 2
+        || this.user.contributor.admin
+        || this.user._id === challenge.leader._id;
+    },
   },
 };
 </script>
